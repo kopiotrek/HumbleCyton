@@ -1,5 +1,6 @@
 FROM osrf/ros:humble-desktop-full
 
+ARG ROS_DISTRO=humble
 
 # Installing useful packages
 RUN apt-get update \
@@ -11,8 +12,11 @@ RUN apt-get update \
 # Installing ROS2 packages
 RUN apt-get update \
     && apt-get install -y \
-    ros-humble-ros-ign-bridge \
-    ros-humble-teleop-twist-keyboard \
+    ament-cmake \
+    ros-$ROS_DISTRO-ros-ign-bridge \
+    ros-$ROS_DISTRO-teleop-twist-keyboard \
+    ros-$ROS_DISTRO-ros2-control \
+    ros-$ROS_DISTRO-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -46,3 +50,9 @@ COPY bashrc /home/${USERNAME}/.bashrc
 # Set up entrypoint and default command
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["bash"]
+
+WORKDIR /app
+# Copy the cyton_ros2 project
+COPY cyton_ros2/src/ros2_RobotSimulation/Cyton src/Cyton
+
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build --packages-select cyton_ros2_gazebo"
