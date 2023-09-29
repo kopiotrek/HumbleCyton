@@ -7,6 +7,8 @@ RUN apt-get update \
     && apt-get install -y \
     nano \
     vim \
+    libgl1-mesa-dri \
+    libnvidia-gl-470-server \
     && rm -rf /var/lib/apt/lists/*
 
 # Installing ROS2 packages
@@ -18,6 +20,8 @@ RUN apt-get update \
     ros-$ROS_DISTRO-ros2-control \
     ros-$ROS_DISTRO-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
+
+RUN rosdep update
 
 
 COPY config/ /site_config/
@@ -50,6 +54,7 @@ COPY bashrc /home/${USERNAME}/.bashrc
 # Set up entrypoint and default command
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["bash"]
+
 
 WORKDIR /app
 # Copy the cyton_ros2 project
