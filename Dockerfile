@@ -15,8 +15,14 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y \
     ament-cmake \
+    ros-$ROS_DISTRO-xacro \
+    ros-$ROS_DISTRO-joint-state-publisher-gui \
     ros-$ROS_DISTRO-ros-ign-bridge \
     ros-$ROS_DISTRO-teleop-twist-keyboard \
+    ros-$ROS_DISTRO-gazebo-ros-pkgs \
+    ros-$ROS_DISTRO-gazebo-ros2-control \
+    ros-$ROS_DISTRO-ign-ros2-control \
+    ros-$ROS_DISTRO-controller-manager \
     ros-$ROS_DISTRO-ros2-control \
     ros-$ROS_DISTRO-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
