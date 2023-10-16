@@ -50,6 +50,11 @@ RUN apt-get update \
   && chmod 0440 /etc/sudoers.d/$USERNAME \
   && rm -rf /var/lib/apt/lists/*
 
+ENV NVIDIA_VISIBLE_DEVICES \
+    ${NVIDIA_VISIBLE_DEVICES:-all}
+ENV NVIDIA_DRIVER_CAPABILITIES \
+    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
+
 
 # Copy the entrypoint and bashrc scripts so we have 
 # our container's environment set up correctly
