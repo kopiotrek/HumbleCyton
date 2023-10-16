@@ -25,12 +25,14 @@ RUN apt-get update \
     ros-$ROS_DISTRO-controller-manager \
     ros-$ROS_DISTRO-ros2-control \
     ros-$ROS_DISTRO-ros2-controllers \
+    # MoveIt
+    ros-$ROS_DISTRO-moveit \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep update
 
 
-COPY config/ /site_config/
+COPY docker/config/ /site_config/
 
 
 # Create a non-root user
@@ -58,8 +60,8 @@ ENV NVIDIA_DRIVER_CAPABILITIES \
 
 # Copy the entrypoint and bashrc scripts so we have 
 # our container's environment set up correctly
-COPY entrypoint.sh /entrypoint.sh
-COPY bashrc /home/${USERNAME}/.bashrc
+COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/bashrc /home/${USERNAME}/.bashrc
 
 
 # Set up entrypoint and default command
@@ -69,6 +71,6 @@ CMD ["bash"]
 
 WORKDIR /app
 # Copy the cyton_ros2 project
-COPY cyton_ros2/src/ros2_RobotSimulation/Cyton src/Cyton
+COPY docker/cyton_ros2/src/ros2_RobotSimulation/Cyton src/Cyton
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build --packages-select cyton_ros2_gazebo"
